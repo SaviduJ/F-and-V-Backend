@@ -1,0 +1,79 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model table1 {
+  name String @id
+  text String
+}
+
+model userRoles {
+  id        Int    @id @default(autoincrement())
+  userRole  String
+  users     users[]
+}
+
+model users {
+  id                Int                @id @default(autoincrement())
+  username          String             @unique
+  password          String
+  locationDetails   locationDetails[]  // One-to-many relationship with locationDetails
+  userRoleId        Int
+  userRole          userRoles          @relation(fields: [userRoleId], references: [id])
+  savedTexts        savedTexts[]       // One-to-many relationship with savedTexts
+  fieldOfficerRoutes   Routes[]  @relation("FieldOfficerRelation")
+  collectingPersonRoutes Routes[] @relation("CollectingPersonRelation")
+  factoryManagerRoutes Routes[]  @relation("FactoryManagerRelation")
+}
+
+model locationDetails {
+  id             Int      @id @default(autoincrement())
+  userId         Int
+  name           String
+  phoneNumber    String
+  latitude       String   // Latitude as a string
+  longitude      String   // Longitude as a string
+  createdAt      DateTime @default(now()) // Timestamp for when the record is created
+  updatedAt      DateTime @updatedAt // Timestamp for when the record is last updated
+  user           users    @relation(fields: [userId], references: [id]) // Foreign key relationship
+  savedTexts     savedTexts[] // One-to-many relationship with savedTexts
+  routeId        Int      // Required foreign key field for the Routes table
+  route          Routes   @relation(fields: [routeId], references: [id]) // Required foreign key relationship with Routes
+}
+
+
+model savedTexts {
+  id             Int      @id @default(autoincrement())
+  locationId     Int
+  userId         Int
+  savedText      String
+  createdAt      DateTime @default(now()) // Timestamp for when the record is created
+  location       locationDetails @relation(fields: [locationId], references: [id])
+  user           users    @relation(fields: [userId], references: [id])
+}
+
+model Routes {
+  id                Int               @id @default(autoincrement())
+  routesName        String
+  fieldOfficerId    Int?
+  fieldOfficer      users?             @relation(fields: [fieldOfficerId], references: [id], name: "FieldOfficerRelation")
+  collectingPersonId Int?
+  collectingPerson  users?             @relation(fields: [collectingPersonId], references: [id], name: "CollectingPersonRelation")
+  factoryManagerId  Int?
+  factoryManager    users?             @relation(fields: [factoryManagerId], references: [id], name: "FactoryManagerRelation")
+  createdAt         DateTime          @default(now()) // Timestamp for when the record is created
+  locationDetails   locationDetails[]
+  Good              String?
+  Rejected          String?
+  status            Int?
+  fieldOfficerAssignDate  String?
+  collectingPersonAssignDate   String?
+  factoryManagerAssignDate  String?
+}
+
+
