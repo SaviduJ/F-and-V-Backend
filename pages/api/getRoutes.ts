@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === 'GET') {
     try {
       // Retrieve all saved texts from the database
-      const routes = await prisma.Routes.findMany({
+      const routes = await prisma.routes.findMany({
         orderBy: {
           id: 'asc', // Sort routes by id in ascending order
         },

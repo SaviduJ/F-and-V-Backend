@@ -37,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
       // Update the route with the given ID
-      const updatedRoute = await prisma.Routes.update({
+      const updatedRoute = await prisma.routes.update({
         where: { id: Number(id) },
         data: {
           routesName,

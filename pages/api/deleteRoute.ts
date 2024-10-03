@@ -14,7 +14,7 @@ export default async function deleteUser(req: NextApiRequest, res: NextApiRespon
       }
 
       // Delete the user from the database
-      await prisma.Routes.delete({
+      await prisma.routes.delete({
         where: { id },
       });
 
