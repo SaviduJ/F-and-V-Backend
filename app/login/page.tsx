@@ -24,7 +24,7 @@ const LoginPage = () => {
         localStorage.setItem('userId', userId.toString());
         localStorage.setItem('userRoleId', userRoleId.toString());
 
-        if (userRoleId == 2) {
+        if (userRoleId == 7) {
           router.push('/dashboard');
         } else {
           setMessage('User role not recognized');
